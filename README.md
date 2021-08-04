@@ -54,39 +54,40 @@ the records created, you might do something like this...
     end
 
     def execute
-       ... actual work of record creation done here ...
+       # ... actual work of record creation done here ...
        Crommand::Result.new(record.id)
     end
 
     def validate()
       errors = Array(String).new
-      # Check that email address.
+      # Check the email address provided.
       errors << "Email address cannot be blank." if email.blank?
       errors << "Invalid email address specified." if !EMAIL_PATTERN.match?(email)
-      ... more validations ...
+      # ... more validations ...
       errors
     end
   end
 ```
 
-Here we've defined a command that accepts a number of data elements (account_no, email,
-first_name etc.). These are passed to the Command instance when it is constructed and
-will be the focus of the validate method were we check that the data provided meets
-the needs of the functionality to be executed _before_ it gets executed. Finally the
-``execute()`` method would contain the core functionality for the Command.
+Here we've defined a command that accepts a number of data elements (account_no,
+email, first_name etc.). These are passed to the Command instance when it is
+constructed and will be the focus of the ``validate()`` method were we check
+that the data provided meets the needs of the functionality to be executed
+_before_ it gets executed. Finally the ``execute()`` method would contain the
+core functionality for the Command.
 
-To make use of this we would instantiate the Command and then invoked the ``run()``
-method on it. Command is a generic class that takes a type that will be the value
-returned from the Command execution (if such is needed). To run the Command you would
-do something like this...
+To make use of this we would instantiate the Command and then invoked the
+``run()`` method on it. Command is a generic class that takes a type that will
+be the value returned from the Command execution (if such is needed). To run the
+Command you would do something like this...
 
 ```crystal
   command = MyCommand.new("123456789", "some.one@somewhere.com", "John", "Smith", "+3531234567")
   result = command.run
   if result.success?
-    ... run code for successful execution here ...
+    # ... run code for successful execution here ...
   else
-    ... run error handler code here ...
+    # ... run error handler code here ...
   end
 ```
 
@@ -103,7 +104,7 @@ not nil, like this...
 ```crystal
    result = command.run
    result.value do |v|
-     ... v will not be nil here ...
+     # ... v will not be nil here ...
    end
 ```
 
