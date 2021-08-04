@@ -3,20 +3,20 @@ require "./spec_helper"
 class BaseTestCommand < Cromand::Command(Int32)
   getter executed : Bool = false
 
-  def execute()
+  def execute
     @executed = true
     Crommand::Result(Int32).new(0)
   end
 end
 
 class TestFailValidation < BaseTestCommand
-  def validate() : Array(String)
+  def validate : Array(String)
     ["Validation failed"]
   end
 end
 
 class TestPassValidation < BaseTestCommand
-  def validate() : Array(String)
+  def validate : Array(String)
     Array(String).new
   end
 end

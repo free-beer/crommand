@@ -95,14 +95,14 @@ Spectator.describe Cromand::Result do
       it "yields to the block if the value is not nil" do
         output = ""
         result = Crommand::Result(String).new("RESULT!")
-        result.value {|v| output = v}
+        result.value { |v| output = v }
         expect(output).to eq "RESULT!"
       end
 
       it "does not yield to the block of the value is nil" do
         output = ""
         result = Crommand::Result(String).new
-        result.value {|v| output = v}
+        result.value { |v| output = v }
         expect(output).to eq ""
       end
     end

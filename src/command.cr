@@ -9,7 +9,7 @@ module Cromand
     # this method directly but would instead call the #run() method which will
     # perform validation and then invoke this method if and only if validation
     # was successful.
-    def execute() : Crommand::Result(T)
+    def execute : Crommand::Result(T)
       Crommand::Result(T).new
     end
 
@@ -17,9 +17,9 @@ module Cromand
     # data before running the execute() method. Will not run the execute()
     # method if validation returns any errors. This method should generally
     # NOT be overridden by derived classes.
-    def run() : Crommand::Result(T)
+    def run : Crommand::Result(T)
       errors = validate()
-      errors.empty? ? self.execute() : Crommand::Result(T).new(errors)
+      errors.empty? ? self.execute : Crommand::Result(T).new(errors)
     end
 
     # Derived classes should override this method to provide functionality that
@@ -29,7 +29,7 @@ module Cromand
     # will be considered to have failed and the String's contained in the
     # Array will be used to create Cromand::Error instance for the Result
     # generated.
-    def validate() : Array(String)
+    def validate : Array(String)
       Array(String).new
     end
   end
