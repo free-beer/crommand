@@ -2,12 +2,19 @@ name: crommand
 version: 0.1.0
 
 authors:
-  - Peter Wood <peter.wood@longboat.com>
+  - Peter Wood <pw0470@gmail.com>
+
+crystal: 1.1.1
+
+description: |
+  Crommand is an implementation of the Command design pattern for the Crystal programing language.
 
 development_dependencies:
   spectator:
     gitlab: arctic-fox/spectator
 
-crystal: 1.1.1
+homepage: https://github.com/free-beer/crommand
 
-license: MIT
+license: Apache-2.0
+
+repository: https://github.com/free-beer/crommand.git
