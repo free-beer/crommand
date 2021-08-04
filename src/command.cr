@@ -1,4 +1,4 @@
-module Cromand
+module Crommand
   # Provides the base class for more concrete command classes. Command is a
   # generic with the type parameter dictating the type that is returned as the
   # value for the result generated when the command is executed.
@@ -27,7 +27,7 @@ module Cromand
     # an Array of Strings. If this Array is empty then validation will be
     # considered to have succeeded. If the Array is not empty then validation
     # will be considered to have failed and the String's contained in the
-    # Array will be used to create Cromand::Error instance for the Result
+    # Array will be used to create Crommand::Error instance for the Result
     # generated.
     def validate : Array(String)
       Array(String).new

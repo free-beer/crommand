@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-Spectator.describe Cromand::Result do
+Spectator.describe Crommand::Result do
   describe "construction" do
     describe "with no parameters" do
       it "creates a new Result with a nil value and no errors" do

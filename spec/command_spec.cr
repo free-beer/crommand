@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-class BaseTestCommand < Cromand::Command(Int32)
+class BaseTestCommand < Crommand::Command(Int32)
   getter executed : Bool = false
 
   def execute
@@ -21,7 +21,7 @@ class TestPassValidation < BaseTestCommand
   end
 end
 
-Spectator.describe Cromand::Command do
+Spectator.describe Crommand::Command do
   describe "#run()" do
     it "invokes the #execute() method when validation succeeds" do
       command = TestPassValidation.new
