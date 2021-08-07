@@ -19,20 +19,42 @@ Spectator.describe Crommand::Result do
     end
 
     describe "with an array of Crommand::Error instances" do
-      it "creates a new Result with a nil value and the specific errors" do
-        result = Crommand::Result(Int32).new([Crommand::Error.new("A test error.")])
-        expect(result.value).to be_nil
-        expect(result.errors.empty?).to be false
-        expect(result.errors.first.message).to eq "A test error."
+      describe "and no value parameter" do
+        it "creates a new Result with a nil value and the specific errors" do
+          result = Crommand::Result(Int32).new([Crommand::Error.new("A test error.")])
+          expect(result.value).to be_nil
+          expect(result.errors.empty?).to be false
+          expect(result.errors.first.message).to eq "A test error."
+        end
+      end
+
+      describe "and specifying the value parameter" do
+        it "creates a new Result with the specified value and the specific errors" do
+          result = Crommand::Result(Int32).new([Crommand::Error.new("A test error.")], 456)
+          expect(result.value).to eq 456
+          expect(result.errors.empty?).to be false
+          expect(result.errors.first.message).to eq "A test error."
+        end
       end
     end
 
     describe "with an array of Strings" do
-      it "creates a new Result with a nil value and the errors for each string specified" do
-        result = Crommand::Result(Int32).new(["A test error."])
-        expect(result.value).to be_nil
-        expect(result.errors.empty?).to be false
-        expect(result.errors.first.message).to eq "A test error."
+      describe "and no value parameter" do
+        it "creates a new Result with a nil value and the errors for each string specified" do
+          result = Crommand::Result(Int32).new(["A test error."])
+          expect(result.value).to be_nil
+          expect(result.errors.empty?).to be false
+          expect(result.errors.first.message).to eq "A test error."
+        end
+      end
+
+      describe "and specifying the value parameter" do
+        it "creates a new Result with the specified value and the errors for each string specified" do
+          result = Crommand::Result(Int32).new(["A test error."], 987)
+          expect(result.value).to eq 987
+          expect(result.errors.empty?).to be false
+          expect(result.errors.first.message).to eq "A test error."
+        end
       end
     end
   end
