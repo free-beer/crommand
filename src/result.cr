@@ -66,7 +66,8 @@ module Crommand
     # then this block will be invoked if and only if the value for the Result
     # is not nil.
     def value : T?
-      yield(@value) if !@value.nil?
+      v = @value
+      yield(v) if !v.nil?
       @value
     end
   end
