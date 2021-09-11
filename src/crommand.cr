@@ -1,3 +1,5 @@
+require "./exceptions"
+require "./optional"
 require "./result"
 require "./command"
 

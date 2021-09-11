@@ -14,31 +14,37 @@ module Crommand
   class Result(T)
     # Instance data.
     getter errors : Array(Error) = [] of Error
-    @value : T? = nil
+    getter returned : Crommand::Optional(T)
 
     # Create a new Result instance with no errors and a nil value.
     def initialize
+      @returned = Crommand::Nothing(T).new
     end
 
     # Create a new Result instance with no errors and the value specified.
-    def initialize(@value : T)
+    def initialize(value : T)
+      @returned = Crommand::Something.new(value)
     end
 
     # Create a Result instance with the errors and values specified.
     def initialize(@errors : Array(Error))
+      @returned = Crommand::Nothing(T).new
     end
 
     # Create a Result instance with the errors and values specified.
-    def initialize(@errors : Array(Error), @value : T)
+    def initialize(@errors : Array(Error), value : T)
+      @returned = Crommand::Something(T).new(value)
     end
 
     # Create a Result instance with the errors and values specified.
     def initialize(errors : Array(String))
+      @returned = Crommand::Nothing(T).new
       @errors = errors.map { |e| Error.new(e) }
     end
 
     # Create a Result instance with the errors and values specified.
-    def initialize(errors : Array(String), @value : T)
+    def initialize(errors : Array(String), value : T)
+      @returned = Crommand::Something(T).new(value)
       @errors = errors.map { |e| Error.new(e) }
     end
 
@@ -55,20 +61,6 @@ module Crommand
     # Tests whether a Result contains no errors.
     def success? : Bool
       errors.size == 0
-    end
-
-    # Fetches the value associated with a Result instance.
-    def value : T?
-      value { }
-    end
-
-    # Fetches the value associated with a Result instance. If a block is given
-    # then this block will be invoked if and only if the value for the Result
-    # is not nil.
-    def value : T?
-      v = @value
-      yield(v) if !v.nil?
-      @value
     end
   end
 end

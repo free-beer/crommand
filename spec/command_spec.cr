@@ -28,7 +28,7 @@ Spectator.describe Crommand::Command do
       result = command.run
       expect(result.success?).to be_true
       expect(command.executed).to be_true
-      expect(result.value).to eq 0
+      expect(result.returned.value).to eq 0
     end
 
     it "does not invokes the #execute() method when validation succeeds" do
