@@ -148,4 +148,43 @@ Spectator.describe Crommand::Result do
       }
     end
   end
+
+  describe "#if_set()" do
+    describe "when a value has been specified for the result" do
+      it "invokes the supplied block" do
+        result = Crommand::Result(Int32).new(1234)
+        count  = 0
+        result.if_set do |v|
+          expect(v).to eq 1234
+          count = 1
+        end
+        expect(count).to eq 1
+      end
+    end
+
+    describe "when a value has not been specified for the result" do
+      it "does not invoke the supplied block" do
+        result = Crommand::Result(Int32).new
+        result.if_set {|v| fail "The Result#if_set() method executed it's block for a result with no value."}
+      end
+    end
+  end
+
+  describe "#if_unset()" do
+    describe "when a value has been specified for the result" do
+      it "does not invoke the supplied block" do
+        result = Crommand::Result(Int32).new(1234)
+        result.if_unset {fail "The Result#if_unset() method executed it's block for a result with a value."}
+      end
+    end
+
+    describe "when a value has not been specified for the result" do
+      it "invokes the supplied block" do
+        result = Crommand::Result(Int32).new
+        count  = 0
+        result.if_unset {count = 1}
+        expect(count).to eq(1)
+      end
+    end
+  end
 end

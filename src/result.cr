@@ -58,6 +58,22 @@ module Crommand
       returned.set?
     end
 
+    # Invokes a supplied block, passing it the value returned through the
+    # result if a value has been set. Does nothing if a value has not been
+    # set.
+    def if_set : Result(T)
+      with self yield(value) if returned.set?
+      self
+    end
+
+
+    # Invokes a supplied block if a value has not been set. Does nothing if
+    # a value has been set.
+    def if_unset : Result(T)
+      with self yield if !returned.set?
+      self
+    end
+
     # Fetches a list of the error strings for a Result instance.
     def messages : Array(String)
       failed? ? errors.map(&.message) : Array(String).new
@@ -72,6 +88,13 @@ module Crommand
     # This will raise an exception if called for a result with no value.
     def value : T
       returned.value
+    end
+
+    # Shortcut mechanism for accessing the value returned through the result.
+    # If the result has a value set then it will be returned, otherwise this
+    # method returns nil.
+    def value? : T|Nil
+      returned.set? ? returned.value : nil
     end
 
     # Creates a Result with a value type of T from a set of errors.
