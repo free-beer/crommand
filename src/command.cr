@@ -14,7 +14,13 @@ module Crommand
     end
 
     # Utility method generates a Crommand::Result failure value that can be
-    # used as a return value for the command execut() method.
+    # used as a return value for the command execute() method.
+    def fail(error : String) : Crommand::Result(T)
+      fail([error])
+    end
+
+    # Utility method generates a Crommand::Result failure value that can be
+    # used as a return value for the command execute() method.
     def fail(errors : Array(String)) : Crommand::Result(T)
       raise Crommand::Exception.new("No error message specified in call to Crommand::Command#fail().") if errors.empty?
       Result(T).fail(errors)
