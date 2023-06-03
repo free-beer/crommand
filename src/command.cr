@@ -13,6 +13,13 @@ module Crommand
       Crommand::Result(T).new
     end
 
+    # Utility method generates a Crommand::Result failure value that can be
+    # used as a return value for the command execut() method.
+    def fail(errors : Array(String)) : Crommand::Result(T)
+      raise Crommand::Exception.new("No error message specified in call to Crommand::Command#fail().") if errors.empty?
+      Result(T).fail(errors)
+    end
+
     # Called to run the command instance. Performs validation of the Command
     # data before running the execute() method. Will not run the execute()
     # method if validation returns any errors. This method should generally
@@ -20,6 +27,19 @@ module Crommand
     def run : Crommand::Result(T)
       errors = validate()
       errors.empty? ? self.execute : Crommand::Result(T).new(errors)
+    end
+
+    # Utility method generates a Crommand::Result success value that can be
+    # used as a return value for the command execute() method. This method
+    # expects the command to have no returned value.
+    def success() : Crommand::Result(T)
+      Result(T).new
+    end
+
+    # Utility method generates a Crommand::Result success value that can be
+    # used as a return value for the command execute() method.
+    def success(value : T) : Crommand::Result(T)
+      Result(T).new(value)
     end
 
     # Derived classes should override this method to provide functionality that

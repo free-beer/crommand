@@ -38,4 +38,34 @@ Spectator.describe Crommand::Command do
       expect(command.executed).to be_false
     end
   end
+
+  describe "#fail()" do
+    it "returns a failed Result instance with specified errors set" do
+      command = TestFailValidation.new
+      result  = command.fail(["Error message."])
+      expect(result.messages).to eq ["Error message."]
+    end
+
+    it "raises an exception if given an empty array" do
+      command = TestFailValidation.new
+      expect_raises {
+        command.fail([] of String)
+      }
+    end
+  end
+
+  describe "#success()" do
+    it "returns a successful Result instance with no value" do
+      command = TestPassValidation.new
+      expect(command.success.has_value?).to be false
+    end
+  end
+
+  describe "#success()" do
+    it "returns a successful Result instance with the given value" do
+      command = TestPassValidation.new
+      expect(command.success(123).has_value?).to be true
+      expect(command.success(123).value).to eq 123
+    end
+  end
 end

@@ -57,6 +57,15 @@ Spectator.describe Crommand::Result do
         end
       end
     end
+
+    describe "using the #fail() class method" do
+      it "returns a failed result with the errors specified" do
+        result = Crommand::Result(Int32).fail(["First message.", "Second message.", "Third message."])
+        expect(result.has_value?).to eq false
+        expect(result.errors.empty?).to eq false
+        expect(result.messages).to eq ["First message.", "Second message.", "Third message."]
+      end
+    end
   end
 
   describe "#failed?()" do
@@ -97,7 +106,7 @@ Spectator.describe Crommand::Result do
     end
   end
 
-  describe "#value()" do
+  describe "#returned()" do
     it "returns nil for a failed result" do
       result = Crommand::Result(Int32).new([Crommand::Error.new("First error."), Crommand::Error.new("Second error.")])
       expect(result.returned.set?).to be_false
@@ -111,6 +120,32 @@ Spectator.describe Crommand::Result do
     it "returns nil where an explicit result was not specified" do
       result = Crommand::Result(Int32).new
       expect(result.returned.set?).to be_false
+    end
+  end
+
+  describe "#has_value?()" do
+    it "returns true when a result has a value" do
+      result = Crommand::Result(Int32).new(1234)
+      expect(result.has_value?).to eq true
+    end
+
+    it "returns false when a result has a value" do
+      result = Crommand::Result(String).fail(["Error message."])
+      expect(result.has_value?).to eq false
+    end
+  end
+
+  describe "#value()" do
+    it "returns the contain value where one is available" do
+      result = Crommand::Result(Int32).new(1234)
+      expect(result.value).to eq(1234)
+    end
+
+    it "raises an exception where a value is not available" do
+      result = Crommand::Result(Float64).fail(["Error message."])
+      expect_raises {
+        result.value
+      }
     end
   end
 end

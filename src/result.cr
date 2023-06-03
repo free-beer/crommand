@@ -53,6 +53,11 @@ module Crommand
       errors.size > 0
     end
 
+    # Tests whether the result contains a returned value.
+    def has_value? : Bool
+      returned.set?
+    end
+
     # Fetches a list of the error strings for a Result instance.
     def messages : Array(String)
       failed? ? errors.map(&.message) : Array(String).new
@@ -61,6 +66,17 @@ module Crommand
     # Tests whether a Result contains no errors.
     def success? : Bool
       errors.size == 0
+    end
+
+    # Shortcut mechanism for accessing the value returned through the result.
+    # This will raise an exception if called for a result with no value.
+    def value : T
+      returned.value
+    end
+
+    # Creates a Result with a value type of T from a set of errors.
+    def self.fail(errors : Array(String))
+      Result(T).new(errors)
     end
   end
 end
