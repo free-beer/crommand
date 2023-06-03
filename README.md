@@ -42,7 +42,7 @@ used to create a number of database records and finally return the id for one of
 the records created, you might do something like this...
 
 ```crystal
-  class MyCommand < Command(Int64)
+  class MyCommand < Crommand::Command(Int64)
     # Command instance data.
     getter account_no : String
     getter email : String
@@ -55,7 +55,7 @@ the records created, you might do something like this...
 
     def execute
        # ... actual work of record creation done here ...
-       Crommand::Result.new(record.id)
+       success(record.id)
     end
 
     def validate()
@@ -93,19 +93,26 @@ Command you would do something like this...
 
 As mentioned, a Command can return a value as part of it's output and this too
 can be accessed via the Result received from a call to ``run()``. This output
-can be accessed via a call to the ``value()`` method on the Result object. The
-type of this value is based on the type specified when defining your Command
-class. There is always the possibility for this value to be ``nil`` (there may
-be no result in the case of failure for example). If you want to run code if and
-only if this value has been set then you can do so by passing a block to the
-``value()`` method and this block will only be invoked if the Result value is
-not nil, like this...
+can be accessed via a call to the ``returned()`` method on the Result object.
+THis will be an instance of the Crommand::Optional class which may or may not
+contain an actual value. To test if a value is present you can call the ``set?()``
+method. A shortcut mechanism is provided for this on the ``Result`` class itself.
+You can call the ``value()`` method to access the value within the ``Result``
+instance but this will raise an exception if a value has not been set. Alternatively
+you can call the ``value?()`` method that returns the value if one is set or ``nil``
+otherwise.
+
+Another option would be to use either or both of the ``#if_set()`` or ``#if_unset()``
+methods. Both of these method accept a block and the block will only get invoked
+if the result has a set value or doesn't have a set value respectively. The block
+for the ``if_set()`` method will be passed the value set as a parameter. Both of these
+method return a reference to the result itself, allowing for chaining. So, if you
+want to run code based on whether you received a result value you could do so like
+this...
 
 ```crystal
    result = command.run
-   result.value do |v|
-     # ... v will not be nil here ...
-   end
+   result.if set {|v| # ... v will be the value set ...}.if_unset {...}
 ```
 
 If you simply do not wish to pass anything back from the execution of your
@@ -113,7 +120,20 @@ Command class you can create a Result instance using the default constructor
 to create a success result with a nil value like this...
 
 ```crystal
-  Crommand::Result.new
+  Crommand::Result(Int32).new
+```
+
+This approach requires you to explicitly specify the return type for the ``Result``
+instance. Alternatively there are some convenience methods within the ``Command``
+class that allow for the generation of an appropriate ``Result`` value that can then
+be returned from your ``execute()`` method. Some examples of these are shown below...
+
+```crystal
+  success                   # Create a result with no set value.
+  success(1234)             # Create a result with a value of 1234.
+  fail("Error message.")    # Create a fail result with the given error message.
+  fail(["First error.",     # Create a fail result with the given error messages.
+        "Second error."])
 ```
 
 ## Contributing
